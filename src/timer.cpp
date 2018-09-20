@@ -2,8 +2,8 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include "graph.cpp"
-#include "slideTunnel.cpp"
 #include "bird.cpp"
+#include "slideTunnel.cpp"
 
 void timer1_init()
 {
@@ -23,20 +23,22 @@ void timer1_init()
 	sei();
 }
 
+
+
 // this ISR is fired whenever a match occurs
 // hence, toggle led here itself..
 unsigned char cnt = 0;
-ISR (TIMER1_COMPA_vect)
-{
+int u,l;
+int flag =0;
+int delay=0;
+ISR (TIMER1_COMPA_vect){
 	cnt++;
-	int flag =0;
-	int u,l;
-	// toggle led here
+	// slide tunnel
 	if(cnt%(20-speed)==0){
-// 			PORTB++;
-// 			if(PORTB==16) PORTB=0;
+		birdHeight++;
+
 		slideTunnel();
-		if(flag>0 && flag<3){
+		if(flag>0 && flag<4){
 			initiateTunnel(u,l);
 			flag++;
 		}
@@ -45,17 +47,26 @@ ISR (TIMER1_COMPA_vect)
 		}
 	}
 	
-	if(cnt>=200){
+	if(cnt>=230){
 		u=rand()%8+2;
 		if(u>7) u = 1;
-		l=u+5+rand()%5;
+		l=u+6+rand()%5;
 		if(l>14) l=14;
-		
 		if(l-u>5) u=l-5;
+
+
 		initiateTunnel(u,l);
 		cnt=0;
-
 		flag=1;
+	}
+	if(PINA && !delay){
+		up=true;
+		birdHeight--;
+		delay++;
+	}
+	if(delay) delay++;
+	if(delay>10){
+		delay=0;
 	}
 }
 
