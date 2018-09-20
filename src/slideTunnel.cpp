@@ -4,9 +4,11 @@ char speed = 1;
 
 
 void slideTunnel(){
+	eraseBird();
 	for(int i = 0; i < 16; i++){
 		graph[i] <<=1;
 	}
+	drawBird();
 }
 
 void initiateTunnel(int u, int l){
