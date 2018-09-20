@@ -11,7 +11,7 @@
 #include "startscreen.cpp"
 
 
-bool gameover=true;
+
 int score = 0;
 
 int main(void)
@@ -20,14 +20,16 @@ int main(void)
     DDRB = 0xFF;
 	DDRC = 0xFF;
 	DDRD = 0xFF;
+	
+	
+	DDRA = 0x0; //need to change that later;
 
-	PORTB=10;
-	PORTC=255;
 
 	// initialize timer
 	timer1_init();
 
 	// loop forever
+	
 	while(1)
 	{
 		// do nothing
@@ -35,7 +37,17 @@ int main(void)
 		// toggle the led in the ISR itself
 		// no need to keep track of any flag bits here
 		// done!
-		draw();
+		 if(!gameover)draw();
+		 else startScreen();
+// 		if(PINA && !delay){
+// 			up=true;
+// 			birdHeight--;
+// 			delay++;
+// 		}
+// 		if(delay) delay++;
+// 		if(delay>600){
+// 			delay=0;
+// 		}
 	}
 	return 0;
 }
